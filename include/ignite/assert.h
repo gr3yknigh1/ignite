@@ -1,5 +1,5 @@
-#ifndef IGNITE_ASSEST_H_
-#define IGNITE_ASSEST_H_
+#ifndef IGNITE_ASSERT_H_
+#define IGNITE_ASSERT_H_
 
 #ifdef IGNITE_DEBUG_MODE
 #define IGNITE_ASSERT()
@@ -7,4 +7,4 @@
 #define IGNITE_ASSERT()
 #endif
 
-#endif // IGNITE_ASSEST_H_
+#endif // IGNITE_ASSERT_H_
