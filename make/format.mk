@@ -1,0 +1,8 @@
+CLANG_FMT        := clang-format
+CLANG_FMT_FLAGS  := -i
+
+format:
+	$(CLANG_FMT) $(CLANG_FMT_FLAGS) $(SOURCES)
+	$(CLANG_FMT) $(CLANG_FMT_FLAGS) $(HEADERS)
+	$(CLANG_FMT) $(CLANG_FMT_FLAGS) $(TESTS_SOURCES)
+

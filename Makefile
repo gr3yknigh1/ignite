@@ -1,87 +1,73 @@
-.PHONY: default all main clean veryclean format format-source format-tests
+.PHONY: default all dirs debug release veryclean asan lsan msan ubsan clean veryclean
 
-MKDIR  = mkdir -p
-REMOVE = rm -rf
+MD = mkdir -p
+RM = rm -rf
 
-CC     = clang
-CFLAGS = -std=c2x
+THIS_MAKE_FILE     := $(abspath $(lastword $(MAKEFILE_LIST)))
+THIS_MAKE_FILE_DIR := $(realpath $(patsubst %/,%,$(dir $(THIS_MAKE_FILE))))
 
-DEBUG_MACRO = IGNITE_CONFIG_DEBUG
-RELEASE_MACRO = IGNITE_CONFIG_RELEASE
+export PROJECT_ROOT           := $(THIS_MAKE_FILE_DIR)
+export PROJECT_NAME           := ignite
+export PROJECT_BUILD_DIR      := $(PROJECT_ROOT)/build
+export PROJECT_OBJ_DIR        := $(PROJECT_BUILD_DIR)/objs
+export PROJECT_TESTS_EXEC_DIR := $(PROJECT_BUILD_DIR)/tests
 
-CFLAGS_SECURE = -Wall
-CFLAGS_SECURE += -Werror
-CFLAGS_SECURE += -Wextra
-CFLAGS_SECURE += -Wpedantic
-CFLAGS_SECURE += -Wuninitialized
-CFLAGS_SECURE += -Wmissing-include-dirs
-CFLAGS_SECURE += -Wshadow
-CFLAGS_SECURE += -Wundef
-CFLAGS_SECURE += -Warc-repeated-use-of-weak
-CFLAGS_SECURE += -Wbitfield-enum-conversion
-CFLAGS_SECURE += -Wconditional-uninitialized
-CFLAGS_SECURE += -Wthread-safety
-CFLAGS_SECURE += -Wconversion
-CFLAGS_SECURE += -Wswitch -Wswitch-enum
-CFLAGS_SECURE += -Wformat-security
-CFLAGS_SECURE += -Wdouble-promotion
-CFLAGS_SECURE += -Wfloat-equal
-CFLAGS_SECURE += -Wfloat-overflow-conversion
-CFLAGS_SECURE += -Wfloat-zero-conversion
-CFLAGS_SECURE += -Wsign-compare
-CFLAGS_SECURE += -Wsign-conversion
+export PROJECT_SOURCES       =
+export PROJECT_HEADERS       =
+export PROJECT_INCLUDE_FLAGS =
+export PROJECT_TARGETS       =
 
-# AR      = ar
-# ARFLAGS = -cvrs
+export CC            := clang
+export CFLAGS        := -std=c2x
+export CFLAGS_SECURE := -Wall
+export AR            := ar
+export ARFLAGS       := -cvrs
 
-PROJECT_NAME = ignite
+# CFLAGS_SECURE += -Werror
+# CFLAGS_SECURE += -Wextra
+# CFLAGS_SECURE += -Wpedantic
+# CFLAGS_SECURE += -Wuninitialized
+# CFLAGS_SECURE += -Wmissing-include-dirs
+# CFLAGS_SECURE += -Wshadow
+# CFLAGS_SECURE += -Wundef
+# CFLAGS_SECURE += -Warc-repeated-use-of-weak
+# CFLAGS_SECURE += -Wbitfield-enum-conversion
+# CFLAGS_SECURE += -Wconditional-uninitialized
+# CFLAGS_SECURE += -Wthread-safety
+# CFLAGS_SECURE += -Wconversion
+# CFLAGS_SECURE += -Wswitch -Wswitch-enum
+# CFLAGS_SECURE += -Wformat-security
+# CFLAGS_SECURE += -Wdouble-promotion
+# CFLAGS_SECURE += -Wfloat-equal
+# CFLAGS_SECURE += -Wfloat-overflow-conversion
+# CFLAGS_SECURE += -Wfloat-zero-conversion
+# CFLAGS_SECURE += -Wsign-compare
+# CFLAGS_SECURE += -Wsign-conversion
 
-PROJECT_DIR = $(CURDIR)
+export DEBUG_MACRO   := IGNITE_CONFIG_DEBUG
+export RELEASE_MACRO := IGNITE_CONFIG_RELEASE
 
-INCLUDE_DIR = $(PROJECT_DIR)/include
-SOURCES_DIR = $(PROJECT_DIR)/src
-BUILD_DIR   = $(PROJECT_DIR)/build
-TESTS_DIR   = $(PROJECT_DIR)/tests
+export CLEAN_TARGETS     :=
+export VERYCLEAN_TARGETS :=
 
-# LIBRARY     = $(BUILD_DIR)/lib$(PROJECT_NAME).a
-EXEC          = $(BUILD_DIR)/$(PROJECT_NAME)
+default: dirs all
 
-OBJ_DIR       = $(BUILD_DIR)/objs
-TESTS_BIN_DIR = $(BUILD_DIR)/tests
+include $(PROJECT_ROOT)/engine/Makefile
+include $(PROJECT_ROOT)/editor/Makefile
 
-TESTS_SOURCES = $(wildcard $(TESTS_DIR)/*.c)
-TESTS_BINS    = $(patsubst $(TESTS_DIR)/%.c, $(TESTS_BIN_DIR)/%, $(TESTS_SOURCES))
-
-SOURCES = $(wildcard $(SOURCES_DIR)/*.c)
-HEADERS = $(wildcard $(INCLUDE_DIR)/**/*.h)
-OBJS    = $(patsubst $(SOURCES_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
-
-INCLUDE_FLAGS = -I$(INCLUDE_DIR)
-
-FORMATTER = clang-format
-FORMATTER_FLAGS = -i
-
-PY_COMP_DB      = compiledb
-PY_ENV          = $(PROJECT_DIR)/.env
-PY_ENV_BIN      = $(PY_ENV)/bin
-PY_PIP_EXEC     = $(PY_ENV_BIN)/pip
-PY_COMP_DB_EXEC = $(PY_ENV_BIN)/compiledb
-
-COMPILE_COMMANDS = $(PROJECT_DIR)/compile_commands.json
-
-CLANG_TIDY = clang-tidy
-CLANG_TIDY_FLAGS = -p $(COMPILE_COMMANDS) --config-file="$(PROJECT_DIR)/.clang-tidy" -header-filter=.*
-
-TARGETS = $(EXEC)
+# include $(PROJECT_ROOT)/make/compiledb.mk
+# include $(PROJECT_ROOT)/make/checks.mk
+# include $(PROJECT_ROOT)/make/format.mk
 
 all: debug
+dirs: $(PROJECT_BUILD_DIR) $(PROJECT_OBJ_DIR) $(PROJECT_TESTS_EXEC_DIR)
 
 debug: CFLAGS += -g -O0 -D $(DEBUG_MACRO)
-debug: $(TARGETS)
+debug: $(PROJECT_TARGETS)
 
 release: CFLAGS += -O3 -D $(RELEASE_MACRO)
 release: clean
-release: $(TARGETS)
+release: $(PROJECT_TARGETS)
 
 asan: CFLAGS += -fsanitize=address -fno-optimize-sibling-calls -fno-omit-frame-pointer
 asan: debug
@@ -95,64 +81,17 @@ msan: debug
 ubsan: CFLAGS += -fsanitize=undefined
 ubsan: debug
 
-configure: $(COMPILE_COMMANDS)
+clean: $(CLEAN_TARGETS)
+	$(RM) $(PROJECT_BUILD_DIR)
 
-clean:
-	$(REMOVE) $(BUILD_DIR)
+veryclean: clean $(VERYCLEAN_TARGETS)
 
-veryclean: clean
-	$(REMOVE) $(PY_ENV)
-	$(REMOVE) $(COMPILE_COMMANDS)
+$(PROJECT_BUILD_DIR):
+	$(MD) $@
 
-$(EXEC): $(BUILD_DIR) $(OBJ_DIR) $(OBJS)
-	$(RM) $(EXEC)
-	$(CC) $(CFLAGS) $(OBJS) -o $@
+$(PROJECT_OBJ_DIR):
+	$(MD) $@
 
-$(BUILD_DIR):
-	$(MKDIR) $@
+$(PROJECT_TESTS_EXEC_DIR):
+	$(MD) $@
 
-$(OBJ_DIR):
-	$(MKDIR) $@
-
-$(OBJ_DIR)/%.o: $(SOURCES_DIR)/%.c $(INCLUDE_DIR)/$(PROJECT_NAME)/%.h
-	$(CC) $(CFLAGS) $(CFLAGS_SECURE) -c $< -o $@ $(INCLUDE_FLAGS)
-
-$(OBJ_DIR)/%.o: $(SOURCES_DIR)/%.c
-	$(CC) $(CFLAGS) $(CFLAGS_SECURE) -c $< -o $@ $(INCLUDE_FLAGS)
-
-tests: $(EXEC) $(TESTS_BIN_DIR) $(TESTS_BINS)
-	@for test in $(TESTS_BINS); do $$test --verbose=1 ; done
-
-$(TESTS_BIN_DIR)/%: $(TESTS_DIR)/%.c
-	$(CC) $(CFLAGS) $< $(OBJS) -o $@ -lcriterion $(INCLUDE_FLAGS)
-
-$(TESTS_BIN_DIR):
-	$(MKDIR) $@
-
-$(COMPILE_COMMANDS): $(PY_COMP_DB_EXEC)
-	$< make all tests -o $@
-	$< make clean checks -o $@
-
-$(PY_COMP_DB_EXEC):
-	python -m venv $(PY_ENV)
-	$(PY_PIP_EXEC) install $(PY_COMP_DB)
-
-checks:
-	$(CLANG_TIDY) $(SOURCES) $(CLANG_TIDY_FLAGS) || true
-	$(CLANG_TIDY) $(HEADERS) $(CLANG_TIDY_FLAGS) || true
-
-install:
-	@echo todo
-
-# Formatting
-format-source:
-	$(FORMATTER) $(FORMATTER_FLAGS) $(SOURCES)
-	$(FORMATTER) $(FORMATTER_FLAGS) $(HEADERS)
-
-format-tests:
-	$(FORMATTER) $(FORMATTER_FLAGS) $(TESTS_SOURCES)
-
-format: format-source format-tests
-
-run:
-	@$(EXEC)
