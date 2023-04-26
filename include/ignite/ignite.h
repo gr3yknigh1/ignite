@@ -1,5 +1,5 @@
-#ifndef IGNITE_H_
-#define IGNITE_H_
+#ifndef IGNITE_IGNITE_H_
+#define IGNITE_IGNITE_H_
 
 #include "ignite/platform.h"
 
@@ -14,4 +14,4 @@
 
 #define IGNITE_STRINGIFY(X) #X
 
-#endif // IGNITE_H_
+#endif // IGNITE_IGNITE_H_
