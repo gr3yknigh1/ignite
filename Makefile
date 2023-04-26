@@ -53,6 +53,8 @@ default: all
 include $(PROJECT_ROOT)/engine/Makefile
 include $(PROJECT_ROOT)/editor/Makefile
 
+include $(PROJECT_ROOT)/thirdparty/glad/Makefile
+
 include $(PROJECT_ROOT)/make/compiledb.mk
 include $(PROJECT_ROOT)/make/checks.mk
 include $(PROJECT_ROOT)/make/format.mk
@@ -86,6 +88,8 @@ clean:
 	$(RM) $(PROJECT_BUILD_DIR)
 
 veryclean: clean compiledb-clean
+
+reset: veryclean configure clean all
 
 $(PROJECT_BUILD_DIR):
 	$(MD) $@
