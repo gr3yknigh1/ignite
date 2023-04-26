@@ -4,10 +4,6 @@ ifndef PROJECT_ROOT
 $(error Running not from root makefile)
 endif
 
-# ifndef IGNITE_ENGINE_LIB
-# $(error Including editor before engine)
-# endif
-
 unexport THIS_MAKE_FILE     := $(abspath $(lastword $(MAKEFILE_LIST)))
 unexport THIS_MAKE_FILE_DIR := $(realpath $(patsubst %/,%,$(dir $(THIS_MAKE_FILE))))
 
