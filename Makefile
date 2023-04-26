@@ -31,8 +31,8 @@ CFLAGS_SECURE += -Wfloat-zero-conversion
 CFLAGS_SECURE += -Wsign-compare
 CFLAGS_SECURE += -Wsign-conversion
 
-AR      = ar
-ARFLAGS = -cvrs
+# AR      = ar
+# ARFLAGS = -cvrs
 
 PROJECT_NAME = ignite
 
@@ -43,7 +43,8 @@ SOURCES_DIR = $(PROJECT_DIR)/src
 BUILD_DIR   = $(PROJECT_DIR)/build
 TESTS_DIR   = $(PROJECT_DIR)/tests
 
-LIBRARY     = $(BUILD_DIR)/lib$(PROJECT_NAME).a
+# LIBRARY     = $(BUILD_DIR)/lib$(PROJECT_NAME).a
+EXEC          = $(BUILD_DIR)/$(PROJECT_NAME)
 
 OBJ_DIR       = $(BUILD_DIR)/objs
 TESTS_BIN_DIR = $(BUILD_DIR)/tests
@@ -71,7 +72,7 @@ COMPILE_COMMANDS = $(PROJECT_DIR)/compile_commands.json
 CLANG_TIDY = clang-tidy
 CLANG_TIDY_FLAGS = -p $(COMPILE_COMMANDS)
 
-TARGETS = $(LIBRARY)
+TARGETS = $(EXEC)
 
 all: debug
 
@@ -103,9 +104,9 @@ veryclean: clean
 	$(REMOVE) $(PY_ENV)
 	$(REMOVE) $(COMPILE_COMMANDS)
 
-$(LIBRARY): $(BUILD_DIR) $(OBJ_DIR) $(OBJS)
-	$(RM) $(LIBRARY)
-	$(AR) $(ARFLAGS) $(LIBRARY) $(OBJS)
+$(EXEC): $(BUILD_DIR) $(OBJ_DIR) $(OBJS)
+	$(RM) $(EXEC)
+	$(CC) $(CFLAGS) $(OBJS) -o $@
 
 $(BUILD_DIR):
 	$(MKDIR) $@
@@ -121,7 +122,7 @@ $(OBJ_DIR)/%.o: $(SOURCES_DIR)/%.c
 	[ -f $(COMPILE_COMMANDS) ] && $(CLANG_TIDY) $(CLANG_TIDY_FLAGS) $< || true
 	$(CC) $(CFLAGS) $(CFLAGS_SECURE) -c $< -o $@ $(INCLUDE_FLAGS)
 
-tests: $(LIBRARY) $(TESTS_BIN_DIR) $(TESTS_BINS)
+tests: $(EXEC) $(TESTS_BIN_DIR) $(TESTS_BINS)
 	@for test in $(TESTS_BINS); do $$test --verbose=1 ; done
 
 $(TESTS_BIN_DIR)/%: $(TESTS_DIR)/%.c
@@ -153,3 +154,5 @@ format-tests:
 
 format: format-source format-tests
 
+run:
+	@$(EXEC)
