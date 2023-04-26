@@ -70,7 +70,7 @@ PY_COMP_DB_EXEC = $(PY_ENV_BIN)/compiledb
 COMPILE_COMMANDS = $(PROJECT_DIR)/compile_commands.json
 
 CLANG_TIDY = clang-tidy
-CLANG_TIDY_FLAGS = -p $(COMPILE_COMMANDS)
+CLANG_TIDY_FLAGS = -p $(COMPILE_COMMANDS) --config-file="$(PROJECT_DIR)/.clang-tidy" -header-filter=.*
 
 TARGETS = $(EXEC)
 
@@ -115,11 +115,9 @@ $(OBJ_DIR):
 	$(MKDIR) $@
 
 $(OBJ_DIR)/%.o: $(SOURCES_DIR)/%.c $(INCLUDE_DIR)/$(PROJECT_NAME)/%.h
-	[ -f $(COMPILE_COMMANDS) ] && $(CLANG_TIDY) $(CLANG_TIDY_FLAGS) $< || true
 	$(CC) $(CFLAGS) $(CFLAGS_SECURE) -c $< -o $@ $(INCLUDE_FLAGS)
 
 $(OBJ_DIR)/%.o: $(SOURCES_DIR)/%.c
-	[ -f $(COMPILE_COMMANDS) ] && $(CLANG_TIDY) $(CLANG_TIDY_FLAGS) $< || true
 	$(CC) $(CFLAGS) $(CFLAGS_SECURE) -c $< -o $@ $(INCLUDE_FLAGS)
 
 tests: $(EXEC) $(TESTS_BIN_DIR) $(TESTS_BINS)
@@ -133,13 +131,15 @@ $(TESTS_BIN_DIR):
 
 $(COMPILE_COMMANDS): $(PY_COMP_DB_EXEC)
 	$< make all tests -o $@
+	$< make clean checks -o $@
 
 $(PY_COMP_DB_EXEC):
 	python -m venv $(PY_ENV)
 	$(PY_PIP_EXEC) install $(PY_COMP_DB)
 
 checks:
-	sh ./scripts/run_checks.sh
+	$(CLANG_TIDY) $(SOURCES) $(CLANG_TIDY_FLAGS) || true
+	$(CLANG_TIDY) $(HEADERS) $(CLANG_TIDY_FLAGS) || true
 
 install:
 	@echo todo
