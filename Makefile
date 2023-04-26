@@ -6,6 +6,9 @@ REMOVE = rm -rf
 CC     = clang
 CFLAGS = -std=c2x
 
+DEBUG_MACRO = IGNITE_CONFIG_DEBUG
+RELEASE_MACRO = IGNITE_CONFIG_RELEASE
+
 CFLAGS_SECURE = -Wall
 CFLAGS_SECURE += -Werror
 CFLAGS_SECURE += -Wextra
@@ -72,10 +75,10 @@ TARGETS = $(LIBRARY)
 
 all: debug
 
-debug: CFLAGS += -g -O0 -D__DEBUG_MODE__
+debug: CFLAGS += -g -O0 -D $(DEBUG_MACRO)
 debug: $(TARGETS)
 
-release: CFLAGS += -O3 -D__RELEASE__MODE__
+release: CFLAGS += -O3 -D $(RELEASE_MACRO)
 release: clean
 release: $(TARGETS)
 
