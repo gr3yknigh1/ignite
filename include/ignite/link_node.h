@@ -8,7 +8,7 @@ struct ignite_link_node {
     struct ignite_link_node *prev;
 };
 
-void ignite_link_node_init(struct ignite_link_node *node, const void *data,
+void ignite_link_node_init(struct ignite_link_node *node, void *data,
                            struct ignite_link_node *next,
                            struct ignite_link_node *prev);
 
