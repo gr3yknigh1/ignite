@@ -27,6 +27,10 @@ Test(link_node, init_orphan_with_value) {
     cr_expect_null(node.prev);
 }
 
+Test(link_node, init_null) {
+    ignite_link_node_init(NULL, NULL, NULL, NULL);
+}
+
 Test(link_node, chain_two_orphan) {
     int value0 = 10;
     int value1 = 20;
