@@ -1,4 +1,4 @@
-.PHONY: default all dirs debug release veryclean asan lsan msan ubsan clean veryclean
+.PHONY: default all dirs debug release asan lsan msan ubsan tests clean veryclean
 
 MD = mkdir -p
 RM = rm -rf
@@ -16,6 +16,7 @@ export PROJECT_SOURCES       =
 export PROJECT_HEADERS       =
 export PROJECT_INCLUDE_FLAGS =
 export PROJECT_TARGETS       =
+export PROJECT_TESTS_EXECS   =
 
 export CC            := clang
 export CFLAGS        := -std=c2x
@@ -77,6 +78,9 @@ msan: debug
 
 ubsan: CFLAGS += -fsanitize=undefined
 ubsan: debug
+
+tests: $(PROJECT_TESTS_EXECS)
+	for test in $(PROJECT_TESTS_EXECS); do $$test --verbose=1 ; done
 
 clean:
 	$(RM) $(PROJECT_BUILD_DIR)
