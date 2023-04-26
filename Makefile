@@ -1,3 +1,5 @@
+#!/bin/make default
+# Makefile
 .PHONY: default all dirs debug release veryclean asan lsan msan ubsan clean veryclean
 
 MD = mkdir -p
@@ -23,43 +25,40 @@ export CFLAGS_SECURE := -Wall
 export AR            := ar
 export ARFLAGS       := -cvrs
 
-# CFLAGS_SECURE += -Werror
-# CFLAGS_SECURE += -Wextra
-# CFLAGS_SECURE += -Wpedantic
-# CFLAGS_SECURE += -Wuninitialized
-# CFLAGS_SECURE += -Wmissing-include-dirs
-# CFLAGS_SECURE += -Wshadow
-# CFLAGS_SECURE += -Wundef
-# CFLAGS_SECURE += -Warc-repeated-use-of-weak
-# CFLAGS_SECURE += -Wbitfield-enum-conversion
-# CFLAGS_SECURE += -Wconditional-uninitialized
-# CFLAGS_SECURE += -Wthread-safety
-# CFLAGS_SECURE += -Wconversion
-# CFLAGS_SECURE += -Wswitch -Wswitch-enum
-# CFLAGS_SECURE += -Wformat-security
-# CFLAGS_SECURE += -Wdouble-promotion
-# CFLAGS_SECURE += -Wfloat-equal
-# CFLAGS_SECURE += -Wfloat-overflow-conversion
-# CFLAGS_SECURE += -Wfloat-zero-conversion
-# CFLAGS_SECURE += -Wsign-compare
-# CFLAGS_SECURE += -Wsign-conversion
+CFLAGS_SECURE += -Werror
+CFLAGS_SECURE += -Wextra
+CFLAGS_SECURE += -Wpedantic
+CFLAGS_SECURE += -Wuninitialized
+CFLAGS_SECURE += -Wmissing-include-dirs
+CFLAGS_SECURE += -Wshadow
+CFLAGS_SECURE += -Wundef
+CFLAGS_SECURE += -Warc-repeated-use-of-weak
+CFLAGS_SECURE += -Wbitfield-enum-conversion
+CFLAGS_SECURE += -Wconditional-uninitialized
+CFLAGS_SECURE += -Wthread-safety
+CFLAGS_SECURE += -Wconversion
+CFLAGS_SECURE += -Wswitch -Wswitch-enum
+CFLAGS_SECURE += -Wformat-security
+CFLAGS_SECURE += -Wdouble-promotion
+CFLAGS_SECURE += -Wfloat-equal
+CFLAGS_SECURE += -Wfloat-overflow-conversion
+CFLAGS_SECURE += -Wfloat-zero-conversion
+CFLAGS_SECURE += -Wsign-compare
+CFLAGS_SECURE += -Wsign-conversion
 
 export DEBUG_MACRO   := IGNITE_CONFIG_DEBUG
 export RELEASE_MACRO := IGNITE_CONFIG_RELEASE
 
-export CLEAN_TARGETS     :=
-export VERYCLEAN_TARGETS :=
-
-default: dirs all
+default: all
 
 include $(PROJECT_ROOT)/engine/Makefile
 include $(PROJECT_ROOT)/editor/Makefile
 
-# include $(PROJECT_ROOT)/make/compiledb.mk
-# include $(PROJECT_ROOT)/make/checks.mk
-# include $(PROJECT_ROOT)/make/format.mk
+include $(PROJECT_ROOT)/make/compiledb.mk
+include $(PROJECT_ROOT)/make/checks.mk
+include $(PROJECT_ROOT)/make/format.mk
 
-all: debug
+all: dirs debug
 dirs: $(PROJECT_BUILD_DIR) $(PROJECT_OBJ_DIR) $(PROJECT_TESTS_EXEC_DIR)
 
 debug: CFLAGS += -g -O0 -D $(DEBUG_MACRO)
@@ -81,10 +80,10 @@ msan: debug
 ubsan: CFLAGS += -fsanitize=undefined
 ubsan: debug
 
-clean: $(CLEAN_TARGETS)
+clean:
 	$(RM) $(PROJECT_BUILD_DIR)
 
-veryclean: clean $(VERYCLEAN_TARGETS)
+veryclean: clean compiledb-clean
 
 $(PROJECT_BUILD_DIR):
 	$(MD) $@

@@ -13,9 +13,9 @@ $(error Running not from root makefile)
 endif
 
 CLANG_TIDY       := clang-tidy
-CLANG_TIDY_FLAGS := -p $(COMPILE_COMMANDS) --config-file="$(PROJECT_ROOT)/.clang-tidy" -header-filter=.* --use-color
+CLANG_TIDY_FLAGS := -p $(COMPILE_COMMANDS) --config-file="$(PROJECT_ROOT)/.clang-tidy" -header-filter=.* --use-color --warnings-as-errors=*
 
 checks:
-	@$(CLANG_TIDY) $(PROJECT_SOURCES) $(CLANG_TIDY_FLAGS) || true
-	@$(CLANG_TIDY) $(PROJECT_HEADERS) $(CLANG_TIDY_FLAGS) || true
+	$(CLANG_TIDY) $(PROJECT_SOURCES) $(CLANG_TIDY_FLAGS) || true
+	$(CLANG_TIDY) $(PROJECT_HEADERS) $(CLANG_TIDY_FLAGS) || true
 

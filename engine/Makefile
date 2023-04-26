@@ -1,4 +1,4 @@
-#!/bin/make
+#!/bin/make engine
 # engine/Makefile
 .PHONY: engine
 

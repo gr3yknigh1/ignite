@@ -1,4 +1,4 @@
-#!/bin/make
+#!/bin/make editor
 # editor/Makefile
 .PHONY: editor run
 

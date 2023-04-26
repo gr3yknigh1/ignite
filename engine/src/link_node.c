@@ -9,7 +9,7 @@ void ignite_link_node_init(struct ignite_link_node *node, void *data,
         return;
     }
 
-    *node = (struct ignite_link_node) {
+    *node = (struct ignite_link_node){
         .data = data,
         .next = next,
         .prev = prev,
