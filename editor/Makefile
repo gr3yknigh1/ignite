@@ -1,5 +1,3 @@
-#!/bin/make editor
-# editor/Makefile
 .PHONY: editor run
 
 ifndef PROJECT_ROOT

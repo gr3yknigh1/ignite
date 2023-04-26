@@ -1,5 +1,3 @@
-#!/bin/make engine
-# engine/Makefile
 .PHONY: engine
 
 ifndef PROJECT_ROOT

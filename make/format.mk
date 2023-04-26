@@ -1,4 +1,4 @@
-
+.PHONY: format
 
 unexport CLANG_FMT        := clang-format
 unexport CLANG_FMT_FLAGS  := -i

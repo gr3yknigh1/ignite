@@ -1,5 +1,3 @@
-#!/bin/make default
-# Makefile
 .PHONY: default all dirs debug release veryclean asan lsan msan ubsan clean veryclean
 
 MD = mkdir -p
