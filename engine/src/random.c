@@ -1,4 +1,5 @@
 #include "ignite/random.h"
+#include "ignite/memory.h"
 
 #include <stdlib.h>
 
@@ -13,7 +14,7 @@ int32_t ignite_random_i32(int32_t min, int32_t max) {
 // NOTE: It's heap allocation
 int32_t *ignite_random_array_i32(uint64_t length, const int32_t min,
                                  int32_t max) {
-    int32_t *array = malloc(sizeof(int32_t) * length);
+    int32_t *array = ignite_memory_allocate(sizeof(int32_t) * length);
 
     for (uint64_t i = 0; i < length; ++i) {
         array[i] = ignite_random_i32(min, max);
