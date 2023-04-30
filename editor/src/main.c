@@ -1,6 +1,8 @@
 #include <stdio.h>
 
+#include "ignite/logging.h"
+
 int main() {
-    printf("Hi hi there!\n");
+    IGNITE_LOG_TRACE("Hi hi there!");
     return 0;
 }
