@@ -21,6 +21,6 @@ void ignite_container_type_init(struct ignite_container_type *type,
                                 ignite_free_func_t free);
 
 void ignite_container_store_value(const struct ignite_container_type *type,
-                                  const void *value);
+                                  void **destanation, const void *value);
 
 #endif // IGNITE_CONTAINER_TYPE_H_
