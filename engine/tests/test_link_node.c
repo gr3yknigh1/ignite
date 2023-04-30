@@ -1,6 +1,17 @@
 #include <criterion/criterion.h>
+#include <criterion/internal/assert.h>
+#include <criterion/new/assert.h>
+#include <criterion/new/stream.h>
 
+#include "ignite/ignite.h"
 #include "ignite/link_node.h"
+
+#ifdef IGNITE_PLATFORM_LINUX
+#include <signal.h>
+static const int ASSERTION_SIGNAL = SIGTRAP;
+#else
+#error "Doesn't support signal check"
+#endif
 
 void init() {}
 void fini() {}
@@ -27,7 +38,7 @@ Test(link_node, init_orphan_with_value) {
     cr_expect_null(node.prev);
 }
 
-Test(link_node, init_null) {
+Test(link_node, init_null, .signal = ASSERTION_SIGNAL) {
     ignite_link_node_init(NULL, NULL, NULL, NULL);
 }
 
@@ -86,3 +97,16 @@ Test(link_node, chain_cirqle) {
     cr_expect_eq(node1.prev, &node0);
 }
 
+Test(link_node, chain_null, .signal = ASSERTION_SIGNAL) {
+    int value0 = 10;
+    int value1 = 20;
+
+    struct ignite_link_node node0;
+    ignite_link_node_init(&node0, &value0, NULL, NULL);
+    struct ignite_link_node node1;
+    ignite_link_node_init(&node1, &value1, NULL, NULL);
+
+    ignite_link_node_chain(&node0, NULL);
+    ignite_link_node_chain(NULL, &node1);
+    ignite_link_node_chain(NULL, NULL);
+}

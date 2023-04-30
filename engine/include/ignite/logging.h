@@ -12,6 +12,7 @@ enum ignite_log_level {
 
 const char *ignite_log_level_to_c_string(const enum ignite_log_level log_level);
 
+// TODO: Add logging handlers
 struct ignite_logger {
     enum ignite_log_level log_level;
     enum ignite_log_level error_level;
