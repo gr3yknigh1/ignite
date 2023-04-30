@@ -84,6 +84,9 @@ ubsan: debug
 tests: $(PROJECT_TESTS_EXECS)
 	for test in $(PROJECT_TESTS_EXECS); do $$test --verbose=1 ; done
 
+clean-tests:
+	for test in $(PROJECT_TESTS_EXECS); do $(RM) $$test ; done
+
 clean:
 	$(RM) $(PROJECT_BUILD_DIR)
 
