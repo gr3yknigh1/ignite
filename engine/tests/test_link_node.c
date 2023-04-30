@@ -6,12 +6,7 @@
 #include "ignite/ignite.h"
 #include "ignite/link_node.h"
 
-#ifdef IGNITE_PLATFORM_LINUX
-#include <signal.h>
-static const int ASSERTION_SIGNAL = SIGTRAP;
-#else
-#error "Doesn't support signal check"
-#endif
+#include "test_common.h"
 
 void init() {}
 void fini() {}
