@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-typedef void (*ignite_copy_func_t)(void *destanation, const void *source,
-                                   size_t size);
+typedef void *(*ignite_copy_func_t)(void *destanation,
+                                    const void *restrict source, size_t size);
 typedef void (*ignite_free_func_t)(void *pointer);
 
 struct ignite_container_type {
