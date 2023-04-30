@@ -12,6 +12,7 @@
 #error "This platform doesn't support debugbreak"
 #endif
 
+#define IGNITE_EXPAND_MACRO(X) X
 #define IGNITE_STRINGIFY(X) #X
 
 #endif // IGNITE_IGNITE_H_
