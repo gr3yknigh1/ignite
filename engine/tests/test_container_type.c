@@ -51,10 +51,49 @@ Test(container_type, store_value_not_ref) {
 
     int source_value = 10;
 
-    int stored_value;
-    int *stored_ptr = &stored_value;
+    int *stored_ptr = NULL;
     ignite_container_store_value(&type, (void **)&stored_ptr, &source_value);
 
-    cr_expect(source_value == source_value);
+    cr_expect(stored_ptr != &source_value);
+    cr_expect(*stored_ptr == source_value);
 }
 
+Test(container_type, store_value_with_null_type, .signal = ASSERTION_SIGNAL) {
+    struct ignite_container_type type;
+    ignite_container_type_init(&type, sizeof(int), false, ignite_memory_copy,
+                               ignite_memory_free);
+
+    int source_value = 10;
+
+    int *stored_ptr = NULL;
+    ignite_container_store_value(NULL, (void **)&stored_ptr, &source_value);
+    ignite_container_store_value(&type, NULL, &source_value);
+}
+
+Test(container_type, store_null_value, .signal = ASSERTION_SIGNAL) {
+    struct ignite_container_type type;
+    ignite_container_type_init(&type, sizeof(int), false, ignite_memory_copy,
+                               ignite_memory_free);
+
+    int *stored_ptr = NULL;
+    ignite_container_store_value(NULL, (void **)&stored_ptr, NULL);
+}
+
+Test(container_type, store_to_null, .signal = ASSERTION_SIGNAL) {
+    struct ignite_container_type type;
+    ignite_container_type_init(&type, sizeof(int), false, ignite_memory_copy,
+                               ignite_memory_free);
+
+    int source_value = 10;
+    ignite_container_store_value(&type, NULL, &source_value);
+}
+
+Test(container_type, store_to_not_null_ptr, .signal = ASSERTION_SIGNAL) {
+    struct ignite_container_type type;
+    ignite_container_type_init(&type, sizeof(int), false, ignite_memory_copy,
+                               ignite_memory_free);
+
+    int source_value = 10;
+    int *stored_ptr = &source_value;
+    ignite_container_store_value(&type, (void **)&stored_ptr, &source_value);
+}
