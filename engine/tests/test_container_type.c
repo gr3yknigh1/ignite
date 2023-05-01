@@ -64,10 +64,8 @@ Test(container_type, store_value_with_null_type, .signal = ASSERTION_SIGNAL) {
                                ignite_memory_free);
 
     int source_value = 10;
-
     int *stored_ptr = NULL;
     ignite_container_store_value(NULL, (void **)&stored_ptr, &source_value);
-    ignite_container_store_value(&type, NULL, &source_value);
 }
 
 Test(container_type, store_null_value, .signal = ASSERTION_SIGNAL) {
@@ -76,7 +74,7 @@ Test(container_type, store_null_value, .signal = ASSERTION_SIGNAL) {
                                ignite_memory_free);
 
     int *stored_ptr = NULL;
-    ignite_container_store_value(NULL, (void **)&stored_ptr, NULL);
+    ignite_container_store_value(&type, (void **)&stored_ptr, NULL);
 }
 
 Test(container_type, store_to_null, .signal = ASSERTION_SIGNAL) {
