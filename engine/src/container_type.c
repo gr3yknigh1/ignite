@@ -19,12 +19,18 @@ void ignite_container_type_init(struct ignite_container_type *type,
     };
 }
 
-// TODO: Deside if client should allocate memory for destanation or we here
 void ignite_container_store_value(const struct ignite_container_type *type,
                                   void **destanation, const void *value) {
+    IGNITE_ASSERT(type != NULL);
+    IGNITE_ASSERT(destanation != NULL);
+    IGNITE_ASSERT(*destanation == NULL);
+    IGNITE_ASSERT(value != NULL);
+
     if (type->is_reference) {
         *destanation = (void *)value;
         return;
     }
+
+    *destanation = ignite_memory_allocate(type->size);
     type->copy(*destanation, value, type->size);
 }
