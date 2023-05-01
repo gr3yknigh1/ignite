@@ -51,7 +51,7 @@ struct ignite_logger ignite_logger_init(enum ignite_log_level log_level,
     };
 }
 
-void ignite_logger_log(const struct ignite_logger * restrict logger,
+void ignite_logger_log(const struct ignite_logger *restrict logger,
                        const enum ignite_log_level log_level,
                        const char *log_message, ...) {
     if (log_level < logger->log_level) {
