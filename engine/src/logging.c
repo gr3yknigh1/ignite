@@ -20,6 +20,8 @@ ignite_log_level_to_c_string(const enum ignite_log_level log_level) {
         return "ERROR";
     case LOG_LEVEL_CRIT:
         return "CRIT";
+    case LOG_LEVEL_NO_LOG:
+        return "NOLOG";
     default:
         return "NONE";
     }

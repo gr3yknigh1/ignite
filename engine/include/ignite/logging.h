@@ -1,6 +1,8 @@
 #ifndef IGNITE_LOGGING_H_
 #define IGNITE_LOGGING_H_
 
+#include <stdio.h>
+
 enum ignite_log_level {
     LOG_LEVEL_TRACE = 0,
     LOG_LEVEL_DEBUG = 20,
@@ -8,6 +10,7 @@ enum ignite_log_level {
     LOG_LEVEL_WARN = 60,
     LOG_LEVEL_ERROR = 80,
     LOG_LEVEL_CRIT = 100,
+    LOG_LEVEL_NO_LOG = 120,
 };
 
 const char *ignite_log_level_to_c_string(const enum ignite_log_level log_level);
