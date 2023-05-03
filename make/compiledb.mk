@@ -19,7 +19,7 @@ $(PY_COMP_DB_EXEC):
 	$(PY_PIP_EXEC) install $(PY_COMP_DB)
 
 $(COMPILE_COMMANDS): $(PY_COMP_DB_EXEC)
-	$< make clean all -o $@
+	$< make clean all tests -o $@
 	$< make clean checks -o $@
 
 configure: $(COMPILE_COMMANDS)
