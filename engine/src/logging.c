@@ -63,8 +63,14 @@ void ignite_logger_log(const struct ignite_logger *restrict logger,
     va_start(args, log_message);
 
     fprintf(out, "[%s]: ", ignite_log_level_to_c_string(log_level));
-    vfprintf(out, log_message, args);
-    fprintf(out, "\n");
 
+    // NOTE: `clang-tidy` says that `args` is uninitalized. This is a bug in
+    // `clang-tidy`. Because of that we forced to ignore this error. Reference:
+    // <https://bugs.llvm.org/show_bug.cgi?id=41311>
+
+    // NOLINTNEXTLINE(clang-analyzer-valist.Uninitialized)
+    vfprintf(out, log_message, args);
+
+    fprintf(out, "\n");
     va_end(args);
 }
