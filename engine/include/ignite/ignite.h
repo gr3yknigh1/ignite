@@ -15,4 +15,7 @@
 #define IGNITE_EXPAND_MACRO(X) X
 #define IGNITE_STRINGIFY(X) #X
 
+// TODO: Add .dll option export
+#define IGNITE_EXPORT
+
 #endif // IGNITE_IGNITE_H_
