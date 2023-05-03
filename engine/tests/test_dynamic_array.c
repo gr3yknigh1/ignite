@@ -26,13 +26,8 @@ Test(dynamic_array, init_empty) {
     cr_expect(array.type == &data.type_i32);
 }
 
-Test(dynamic_array, init_from_other) {
-}
+Test(dynamic_array, init_from_other) {}
 
-Test(dynamic_array, init_from_ptr) {
-}
+Test(dynamic_array, init_from_ptr) {}
 
-Test(dynamic_array, reserve) {
-}
-
-
+Test(dynamic_array, reserve) {}
