@@ -1,4 +1,4 @@
-.PHONY: default all dirs debug release asan lsan msan ubsan tests clean veryclean
+.PHONY: default all dirs debug release asan lsan msan ubsan tests clean veryclean clean-build clean-tests
 
 MD = mkdir -p
 RM = rm -rf
@@ -15,6 +15,7 @@ export PROJECT_TESTS_EXEC_DIR := $(PROJECT_BUILD_DIR)/tests
 export PROJECT_SOURCES       =
 export PROJECT_HEADERS       =
 export PROJECT_TESTS_SOURCES =
+export PROJECT_OBJS          =
 
 export PROJECT_TARGETS       =
 export PROJECT_TESTS_EXECS   =
@@ -51,11 +52,10 @@ export RELEASE_MACRO := IGNITE_CONFIG_RELEASE
 
 default: all
 
+include $(PROJECT_ROOT)/thirdparty/glad/Makefile
+
 include $(PROJECT_ROOT)/engine/Makefile
 include $(PROJECT_ROOT)/editor/Makefile
-
-include $(PROJECT_ROOT)/thirdparty/glad/Makefile
-include $(PROJECT_ROOT)/thirdparty/libcsptr/Makefile
 
 include $(PROJECT_ROOT)/make/compiledb.mk
 include $(PROJECT_ROOT)/make/checks.mk
@@ -86,13 +86,16 @@ ubsan: debug
 tests: $(PROJECT_TESTS_EXECS)
 	for test in $(PROJECT_TESTS_EXECS); do $$test --verbose=1 ; done
 
-clean-tests:
-	for test in $(PROJECT_TESTS_EXECS); do $(RM) $$test ; done
-
 clean:
+	for obj in $(PROJECT_OBJS); do $(RM) $$obj ; done
+
+clean-tests:
+	$(RM) $(PROJECT_TESTS_EXEC_DIR)
+
+clean-build:
 	$(RM) $(PROJECT_BUILD_DIR)
 
-veryclean: clean compiledb-clean
+veryclean: clean-build compiledb-clean
 
 reset: veryclean configure clean all
 
