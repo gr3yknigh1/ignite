@@ -18,12 +18,4 @@
 // TODO: Add .dll option export
 #define IGNITE_EXPORT
 
-#if defined(__clang__) || defined(__gcc__)
-#define IGNITE_CLEANUP(__cleanup_callback)                                     \
-    __attribute__((__cleanup__(__cleanup_callback)))
-#else
-#error                                                                         \
-    "This compiler probably doesn't support `__cleanup__` attribute. Sorry MSVC"
-#endif
-
 #endif // IGNITE_IGNITE_H_
