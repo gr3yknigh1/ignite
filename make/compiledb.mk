@@ -2,9 +2,9 @@
 
 RM ?= rm -rf
 
-THIS_MAKE_FILE     := $(abspath $(lastword $(MAKEFILE_LIST)))
-THIS_MAKE_FILE_DIR := $(realpath $(patsubst %/,%,$(dir $(THIS_MAKE_FILE))))
-PROJECT_ROOT       ?= $(THIS_MAKE_FILE_DIR)
+unexport THIS_MAKE_FILE     := $(abspath $(lastword $(MAKEFILE_LIST)))
+unexport THIS_MAKE_FILE_DIR := $(realpath $(patsubst %/,%,$(dir $(THIS_MAKE_FILE))))
+unexport PROJECT_ROOT       ?= $(THIS_MAKE_FILE_DIR)
 
 unexport PY_COMP_DB       := compiledb
 unexport PY_ENV           := $(PROJECT_ROOT)/.env

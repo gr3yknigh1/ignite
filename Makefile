@@ -14,7 +14,8 @@ export PROJECT_TESTS_EXEC_DIR := $(PROJECT_BUILD_DIR)/tests
 
 export PROJECT_SOURCES       =
 export PROJECT_HEADERS       =
-export PROJECT_INCLUDE_FLAGS =
+export PROJECT_TESTS_SOURCES =
+
 export PROJECT_TARGETS       =
 export PROJECT_TESTS_EXECS   =
 
@@ -54,6 +55,7 @@ include $(PROJECT_ROOT)/engine/Makefile
 include $(PROJECT_ROOT)/editor/Makefile
 
 include $(PROJECT_ROOT)/thirdparty/glad/Makefile
+include $(PROJECT_ROOT)/thirdparty/libcsptr/Makefile
 
 include $(PROJECT_ROOT)/make/compiledb.mk
 include $(PROJECT_ROOT)/make/checks.mk
