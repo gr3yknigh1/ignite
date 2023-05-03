@@ -1,4 +1,4 @@
-.PHONY: configure compiledb-clean
+.PHONY: configure reconfigure compiledb-clean compiledb-clean-env compiledb-clean-compile-commands
 
 RM ?= rm -rf
 
@@ -24,6 +24,12 @@ $(COMPILE_COMMANDS): $(PY_COMP_DB_EXEC)
 
 configure: $(COMPILE_COMMANDS)
 
-compiledb-clean:
+reconfigure: compiledb-clean-compile-commands configure
+
+compiledb-clean-env:
 	$(RM) $(PY_ENV)
+
+compiledb-clean-compile-commands:
 	$(RM) $(COMPILE_COMMANDS)
+
+compiledb-clean: compiledb-clean-env compiledb-clean-compile-commands
