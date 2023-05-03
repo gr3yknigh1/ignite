@@ -6,7 +6,7 @@
 
 #ifdef IGNITE_CONFIG_DEBUG
 
-#define __IGNITE_ASSERT_IMPL(__check, __message, ...)                          \
+#define IGNITE_ASSERT_IMPL(__check, __message, ...)                            \
     do {                                                                       \
         if (!(__check)) {                                                      \
             IGNITE_INTERNAL_LOG_ERROR(                                         \
@@ -17,20 +17,18 @@
         }                                                                      \
     } while (0)
 
-#define __IGNITE_ASSERT_WITHOUT_LOG(__check)                                   \
-    __IGNITE_ASSERT_IMPL(__check, "", "")
+#define IGNITE_ASSERT_WITHOUT_LOG(__check) IGNITE_ASSERT_IMPL(__check, "", "")
 
-#define __IGNITE_ASSERT_WITH_LOG(__check, ...)                                 \
-    __IGNITE_ASSERT_IMPL(__check, ": " __VA_ARGS__, "")
+#define IGNITE_ASSERT_WITH_LOG(__check, ...)                                   \
+    IGNITE_ASSERT_IMPL(__check, ": " __VA_ARGS__, "")
 
-#define __IGNITE_GET_ASSERT_MACRO_NAME(__arg0, __arg1, __macro, ...) __macro
-#define __IGNITE_GET_ASSERT_MACRO(...)                                         \
-    IGNITE_EXPAND_MACRO(                                                       \
-        __IGNITE_GET_ASSERT_MACRO_NAME(__VA_ARGS__, __IGNITE_ASSERT_WITH_LOG,  \
-                                       __IGNITE_ASSERT_WITHOUT_LOG, void))
+#define IGNITE_GET_ASSERT_MACRO_NAME(__arg0, __arg1, __macro, ...) __macro
+#define IGNITE_GET_ASSERT_MACRO(...)                                           \
+    IGNITE_EXPAND_MACRO(IGNITE_GET_ASSERT_MACRO_NAME(                          \
+        __VA_ARGS__, IGNITE_ASSERT_WITH_LOG, IGNITE_ASSERT_WITHOUT_LOG, void))
 
 #define IGNITE_ASSERT(...)                                                     \
-    IGNITE_EXPAND_MACRO(__IGNITE_GET_ASSERT_MACRO(__VA_ARGS__)(__VA_ARGS__))
+    IGNITE_EXPAND_MACRO(IGNITE_GET_ASSERT_MACRO(__VA_ARGS__)(__VA_ARGS__))
 
 #else
 
