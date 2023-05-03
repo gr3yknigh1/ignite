@@ -9,9 +9,10 @@ THIS_MAKE_FILE_DIR := $(realpath $(patsubst %/,%,$(dir $(THIS_MAKE_FILE))))
 
 GLAD_DIR  := $(THIS_MAKE_FILE_DIR)
 GLAD_NAME := glad
-export GLAD_LIB  := $(PROJECT_BUILD_DIR)/lib$(GLAD_NAME).a
 
-GLAD_INCLUDE_DIR := $(GLAD_DIR)/include
+export GLAD_LIB  := $(PROJECT_BUILD_DIR)/lib$(GLAD_NAME).a
+export GLAD_INCLUDE_DIR := $(GLAD_DIR)/include
+
 GLAD_SOURCES_DIR := $(GLAD_DIR)/src
 
 GLAD_SOURCES := $(wildcard $(GLAD_SOURCES_DIR)/*.c)
