@@ -44,7 +44,7 @@ void ignite_dynamic_array_init_from_ptr(
     };
 
     if (!array->type->is_reference) {
-        ignite_memory_copy(array->data, data, length);
+        ignite_memory_copy(array->data, data, type->size * length);
         return;
     }
 
