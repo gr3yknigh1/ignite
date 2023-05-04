@@ -7,7 +7,7 @@
 #define IGNITE_DEBUGBREAK() __debugbreak()
 #elif defined(IGNITE_PLATFORM_LINUX)
 #include <signal.h>
-#define IGNITE_DEBUGBREAK() raise(SIGTRAP)
+#define IGNITE_DEBUGBREAK() raise(SIGILL)
 #else
 #error "This platform doesn't support debugbreak"
 #endif
