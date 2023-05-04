@@ -3,9 +3,10 @@
 #include "test_common.h"
 
 #include "ignite/container_type.h"
+#include "ignite/logging.h"
 #include "ignite/memory.h"
 
-void init() {}
+void init() { ignite_internal_logger.log_level = LOG_LEVEL_NO_LOG; }
 void fini() {}
 
 TestSuite(container_type, .init = init, .fini = fini);

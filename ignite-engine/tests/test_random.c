@@ -3,10 +3,14 @@
 
 #include <criterion/criterion.h>
 
+#include "ignite/logging.h"
 #include "ignite/random.h"
 #include "test_common.h"
 
-void init() { ignite_random_init((uint32_t)time(NULL)); }
+void init() {
+    ignite_random_init((uint32_t)time(NULL));
+    ignite_internal_logger.log_level = LOG_LEVEL_NO_LOG;
+}
 void fini() {}
 
 TestSuite(random, .init = init, .fini = fini);

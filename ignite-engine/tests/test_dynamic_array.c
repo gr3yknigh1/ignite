@@ -1,5 +1,6 @@
 #include <criterion/criterion.h>
 
+#include "ignite/logging.h"
 #include "ignite/container_type.h"
 #include "ignite/dynamic_array.h"
 #include "ignite/memory.h"
@@ -11,6 +12,7 @@ static struct {
 void init() {
     ignite_container_type_init(&data.type_i32, sizeof(int32_t), false,
                                ignite_memory_copy, ignite_memory_free);
+    ignite_internal_logger.log_level = LOG_LEVEL_NO_LOG;
 }
 void fini() {}
 

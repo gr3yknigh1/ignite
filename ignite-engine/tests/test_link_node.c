@@ -5,10 +5,11 @@
 
 #include "ignite/ignite.h"
 #include "ignite/link_node.h"
+#include "ignite/logging.h"
 
 #include "test_common.h"
 
-void init() {}
+void init() { ignite_internal_logger.log_level = LOG_LEVEL_NO_LOG; }
 void fini() {}
 
 TestSuite(link_node, .init = init, .fini = fini);
