@@ -54,8 +54,8 @@ default: all
 
 include $(PROJECT_ROOT)/thirdparty/glad/Makefile
 
-include $(PROJECT_ROOT)/engine/Makefile
-include $(PROJECT_ROOT)/editor/Makefile
+include $(PROJECT_ROOT)/ignite-engine/Makefile
+include $(PROJECT_ROOT)/ignite-editor/Makefile
 
 include $(PROJECT_ROOT)/make/compiledb.mk
 include $(PROJECT_ROOT)/make/checks.mk
