@@ -18,6 +18,8 @@
 // TODO: Add .dll option export
 #define IGNITE_EXPORT
 
-#define IGNITE_ARRAY_LENGTH(__array) sizeof((__array)) / sizeof((__array)[0])
+#define IGNITE_ARRAY_LENGTH(__array) (sizeof((__array)) / sizeof((__array)[0]))
+
+#define IGNITE_INLINE inline
 
 #endif // IGNITE_IGNITE_H_

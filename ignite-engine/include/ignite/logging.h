@@ -1,6 +1,7 @@
 #ifndef IGNITE_LOGGING_H_
 #define IGNITE_LOGGING_H_
 
+#include "ignite/types.h"
 #include <stdio.h>
 
 enum ignite_log_level {
@@ -13,7 +14,7 @@ enum ignite_log_level {
     LOG_LEVEL_NO_LOG = 120,
 };
 
-const char *ignite_log_level_to_c_string(const enum ignite_log_level log_level);
+c_str ignite_log_level_to_c_str(const enum ignite_log_level log_level);
 
 // TODO: Add logging handlers
 struct ignite_logger {
@@ -28,8 +29,7 @@ struct ignite_logger ignite_logger_init(enum ignite_log_level log_level,
                                         enum ignite_log_level error_level);
 
 void ignite_logger_log(const struct ignite_logger *logger,
-                       const enum ignite_log_level level, const char *message,
-                       ...);
+                       const enum ignite_log_level level, c_str message, ...);
 
 #define IGNITE_INTERNAL_LOG_TRACE(...)                                         \
     ignite_logger_log(&ignite_internal_logger, LOG_LEVEL_TRACE, __VA_ARGS__)

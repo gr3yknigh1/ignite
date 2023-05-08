@@ -43,7 +43,7 @@ IGNITE_STATIC_ASSERT((bool)(sizeof(ssize) == 8),
                      "Expected `ssize` to be 8 byte");
 
 typedef unsigned char byte;
-typedef const char *cstr;
+typedef const char *c_str;
 
 IGNITE_STATIC_ASSERT((bool)(sizeof(byte) == 1), "Expected `byte` to be 1 byte");
 

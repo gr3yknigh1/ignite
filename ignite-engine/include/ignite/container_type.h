@@ -2,24 +2,23 @@
 #define IGNITE_CONTAINER_TYPE_H_
 
 #include <stdbool.h>
-#include <stddef.h>
 
 #include "ignite/memory.h"
 #include "ignite/types.h"
 
 typedef void *(*ignite_copy_func_t)(void *destanation,
-                                    const void *restrict source, size_t size);
+                                    const void *restrict source, usize size);
 typedef void (*ignite_free_func_t)(void *pointer);
 
 struct ignite_container_type {
-    size_t size;
+    usize size;
     bool is_reference;
     ignite_copy_func_t copy;
     ignite_free_func_t free;
 };
 
 void ignite_container_type_init(struct ignite_container_type *type,
-                                const size_t size, bool is_reference,
+                                const usize size, bool is_reference,
                                 ignite_copy_func_t copy,
                                 ignite_free_func_t free);
 

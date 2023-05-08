@@ -29,7 +29,7 @@ void ignite_dynamic_array_init_from_other(
 }
 
 void ignite_dynamic_array_init_from_ptr(
-    struct ignite_dynamic_array *array, const void *data, const uint64_t length,
+    struct ignite_dynamic_array *array, const void *data, const u64 length,
     const struct ignite_container_type *type) {
 
     IGNITE_ASSERT(array != NULL);
@@ -48,14 +48,14 @@ void ignite_dynamic_array_init_from_ptr(
         return;
     }
 
-    for (uint64_t i = 0; i < length; ++i) {
+    for (u64 i = 0; i < length; ++i) {
         array->type->copy((char *)array->data + i, (char *)data + i,
                           type->size);
     }
 }
 
 void ignite_dynamic_array_copy(void *restrict destanation, const void *source,
-                               size_t size) {
+                               usize size) {
     (void)size;
 
     IGNITE_ASSERT(destanation != NULL);
@@ -66,4 +66,68 @@ void ignite_dynamic_array_copy(void *restrict destanation, const void *source,
     const struct ignite_dynamic_array *source_array = source;
 
     ignite_dynamic_array_init_from_other(destanation_array, source_array);
+}
+
+void ignite_dynamic_array_push_back(struct ignite_dynamic_array *array,
+                                    const void *data) {
+    IGNITE_ASSERT(array != NULL);
+    IGNITE_ASSERT(data != NULL);
+
+    if (array->length == array->capacity) {
+        ignite_dynamic_array_enlarge(array,
+                                     ignite_dynamic_array_capacity_multiplyer);
+    }
+
+    ignite_memory_copy((char *)array->data + array->type->size * array->length,
+                       data, array->type->size);
+
+    ++(array->length);
+}
+
+void ignite_dynamic_array_reserve(struct ignite_dynamic_array *array,
+                                  u64 amount) {
+    IGNITE_ASSERT(array != NULL);
+
+    if (amount == 0) {
+        return;
+    }
+
+    usize data_size = IGNITE_DYNAMIC_ARRAY_DATA_SIZE(array);
+    u64 new_capacity = array->capacity + amount;
+    usize new_data_size = new_capacity * array->type->size;
+
+    void *new_data = ignite_memory_allocate(new_data_size);
+    ignite_memory_copy(new_data, array->data, data_size);
+    ignite_memory_free(array->data);
+
+    array->data = new_data;
+    array->capacity = new_capacity;
+}
+
+void ignite_dynamic_array_enlarge(struct ignite_dynamic_array *array,
+                                  f32 multiplyer) {
+    IGNITE_ASSERT(array != NULL);
+    IGNITE_ASSERT(multiplyer >= 0.01f);
+
+    u64 enlarge_amount =
+        (u64)((f32)(array->capacity == 0 ? 1 : array->capacity) * multiplyer) -
+        array->capacity;
+
+    ignite_dynamic_array_reserve(array, enlarge_amount);
+}
+
+enum ignite_status
+ignite_dynamic_array_get(const struct ignite_dynamic_array *array,
+                         const u64 index, void **out_ptr) {
+    IGNITE_ASSERT(array != NULL);
+    IGNITE_ASSERT(array->data != NULL);
+    IGNITE_ASSERT(array->length != 0);
+    IGNITE_ASSERT(array->type != NULL);
+
+    if (index > array->length - 1) {
+        return IGNITE_INDEX_ERR;
+    }
+
+    *out_ptr = (char *)(array->data) + array->type->size * index;
+    return IGNITE_OK;
 }

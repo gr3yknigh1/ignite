@@ -1,8 +1,8 @@
 #include <criterion/criterion.h>
 
-#include "ignite/logging.h"
 #include "ignite/container_type.h"
 #include "ignite/dynamic_array.h"
+#include "ignite/logging.h"
 #include "ignite/memory.h"
 
 static struct {

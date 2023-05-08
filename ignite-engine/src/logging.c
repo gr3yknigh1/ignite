@@ -1,12 +1,9 @@
 #include "ignite/logging.h"
 
 #include <stdarg.h>
-#include <stdint.h>
 #include <stdio.h>
-#include <string.h>
 
-const char *
-ignite_log_level_to_c_string(const enum ignite_log_level log_level) {
+c_str ignite_log_level_to_c_str(const enum ignite_log_level log_level) {
     switch (log_level) {
     case LOG_LEVEL_TRACE:
         return "TRACE";
@@ -54,8 +51,8 @@ struct ignite_logger ignite_logger_init(enum ignite_log_level log_level,
 }
 
 void ignite_logger_log(const struct ignite_logger *restrict logger,
-                       const enum ignite_log_level log_level,
-                       const char *log_message, ...) {
+                       const enum ignite_log_level log_level, c_str log_message,
+                       ...) {
     if (log_level < logger->log_level) {
         return;
     }
@@ -64,7 +61,7 @@ void ignite_logger_log(const struct ignite_logger *restrict logger,
     va_list args;
     va_start(args, log_message);
 
-    fprintf(out, "[%s]: ", ignite_log_level_to_c_string(log_level));
+    fprintf(out, "[%s]: ", ignite_log_level_to_c_str(log_level));
 
     // NOTE: `clang-tidy` says that `args` is uninitalized. This is a bug in
     // `clang-tidy`. Because of that we forced to ignore this error. Reference:

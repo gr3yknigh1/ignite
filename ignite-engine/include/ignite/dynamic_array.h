@@ -2,20 +2,23 @@
 #define IGNITE_DYNAMIC_ARRAY_H_
 
 #include <stddef.h>
-#include <stdint.h>
 
 #include "ignite/container_type.h"
+#include "ignite/ignite.h"
 #include "ignite/status.h"
 
 extern float ignite_dynamic_array_capacity_multiplyer;
 
 struct ignite_dynamic_array {
     void *data;
-    uint64_t capacity;
+    u64 capacity;
 
-    uint64_t length;
+    u64 length;
     const struct ignite_container_type *type;
 };
+
+#define IGNITE_DYNAMIC_ARRAY_DATA_SIZE(__darray) \
+    ((__darray)->capacity * (__darray)->type->size)
 
 void ignite_dynamic_array_init_empty(struct ignite_dynamic_array *array,
                                      const struct ignite_container_type *type);
@@ -25,11 +28,11 @@ void ignite_dynamic_array_init_from_other(
     const struct ignite_dynamic_array *other);
 
 void ignite_dynamic_array_init_from_ptr(
-    struct ignite_dynamic_array *array, const void *data, const uint64_t length,
+    struct ignite_dynamic_array *array, const void *data, const u64 length,
     const struct ignite_container_type *type);
 
 void ignite_dynamic_array_copy(void *restrict destanation, const void *source,
-                               size_t size);
+                               usize size);
 
 void ignite_dynamic_array_push_back(struct ignite_dynamic_array *array,
                                     const void *data);
@@ -37,13 +40,17 @@ void ignite_dynamic_array_push_back(struct ignite_dynamic_array *array,
 void ignite_dynamic_array_push_front(struct ignite_dynamic_array *array,
                                      const void *data);
 
-enum ignite_status
-ignite_dynamic_array_reserve(struct ignite_dynamic_array *array,
-                             uint64_t amount);
+void ignite_dynamic_array_enlarge(struct ignite_dynamic_array *array,
+                                  f32 multiplyer);
 
-enum ignite_status ignite_dynamic_array_get(struct ignite_dynamic_array *array,
-                                            const uint64_t index,
-                                            void **out_ptr);
+enum ignite_status
+ignite_dynamic_array_shrink(struct ignite_dynamic_array *array, u64 item_count);
+
+void ignite_dynamic_array_shrink_to_fit(struct ignite_dynamic_array *array);
+
+enum ignite_status
+ignite_dynamic_array_get(const struct ignite_dynamic_array *array,
+                         const u64 index, void **out_ptr);
 
 void ignite_dynamic_array_clear(struct ignite_dynamic_array *array);
 
