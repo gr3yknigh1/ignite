@@ -84,11 +84,12 @@ void ignite_dynamic_array_push_back(struct ignite_dynamic_array *array,
     ++(array->length);
 }
 
-void ignite_dynamic_array_reserve(struct ignite_dynamic_array *array,
+void ignite_dynamic_array_realloc(struct ignite_dynamic_array *array,
                                   u64 amount) {
     IGNITE_ASSERT(array != NULL);
+    IGNITE_ASSERT(amount < array->capacity);
 
-    if (amount == 0) {
+    if (amount == 0 || amount == array->capacity) {
         return;
     }
 
@@ -113,7 +114,7 @@ void ignite_dynamic_array_enlarge(struct ignite_dynamic_array *array,
         (u64)((f32)(array->capacity == 0 ? 1 : array->capacity) * multiplyer) -
         array->capacity;
 
-    ignite_dynamic_array_reserve(array, enlarge_amount);
+    ignite_dynamic_array_realloc(array, enlarge_amount);
 }
 
 enum ignite_status

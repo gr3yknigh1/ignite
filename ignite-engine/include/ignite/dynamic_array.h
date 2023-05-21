@@ -40,6 +40,9 @@ void ignite_dynamic_array_push_back(struct ignite_dynamic_array *array,
 void ignite_dynamic_array_push_front(struct ignite_dynamic_array *array,
                                      const void *data);
 
+void ignite_dynamic_array_realloc(struct ignite_dynamic_array *array,
+                                  u64 amount);
+
 void ignite_dynamic_array_enlarge(struct ignite_dynamic_array *array,
                                   f32 multiplyer);
 
